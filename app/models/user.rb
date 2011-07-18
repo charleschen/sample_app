@@ -1,8 +1,17 @@
-class User < ActiveRecord::Base
-  attr_accessor :name, :email
-  
-end
 
+class User < ActiveRecord::Base
+  attr_accessible :name, :email
+  
+  email_regex = /\A[\w+\-.]+@[a-z\-\d.]+\.[a-z]+\z/i
+  
+  # uniqueness validation from rails isn't always completely unique
+  validates :name,  :presence   => true, 
+                    :length     => { :maximum => 50 }
+  
+  validates :email, :presence   => true,
+                    :format     => { :with => email_regex},
+                    :uniqueness => { :case_sensitive => false}
+end
 # == Schema Information
 #
 # Table name: users
