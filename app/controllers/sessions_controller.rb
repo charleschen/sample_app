@@ -14,6 +14,8 @@ class SessionsController < ApplicationController
       render 'new' # doesn't count as a new request
     else
       # success
+      sign_in user
+      redirect_to user
     end
   end
   
