@@ -18,5 +18,14 @@ namespace :db do
                     :password => password,
                     :password_confirmation => password )
     end
+    
+    User.all(:limit => 6).each do |user| # only pulls out 6 elements
+      50.times do
+        user.microposts.create!(:content => "Lorem ipsum dolor sit ametdf ")
+      end
+    end
+    
   end
+  
+  
 end

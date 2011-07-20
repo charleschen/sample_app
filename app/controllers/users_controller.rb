@@ -12,6 +12,7 @@ class UsersController < ApplicationController
   def show
     @user = User.find(params[:id])
     @title = @user.name  # html is escaped by default
+    @microposts = @user.microposts
   end
   
   def new
