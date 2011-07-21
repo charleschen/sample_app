@@ -10,8 +10,8 @@ namespace :db do
                   :password_confirmation => "leines" )
     admin.toggle!(:admin)
     99.times do |n|
-      name = "Charles#{n+1}" #Faker::Name.name
-      email = "#{name}@example.com"
+      name = Faker::Name.name
+      email = "example-#{n+1}@railstutorial.com"
       password = "password"
       User.create!( :name => name,
                     :email => email,
@@ -21,7 +21,7 @@ namespace :db do
     
     User.all(:limit => 6).each do |user| # only pulls out 6 elements
       50.times do
-        user.microposts.create!(:content => "Lorem ipsum dolor sit ametdf ")
+        user.microposts.create!(:content => Faker::Lorem.sentence(5))
       end
     end
     

@@ -41,6 +41,11 @@ class User < ActiveRecord::Base
     encrypted_password == encrypt(submitted_password)
   end
   
+  def feed
+    #microposts
+    Micropost.where("user_id = ?", id) # conditional find, question mark escapes the sql command
+  end
+  
   # or class << self
   #  def authenticate
   #  end

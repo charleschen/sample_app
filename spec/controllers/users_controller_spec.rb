@@ -17,6 +17,10 @@ describe UsersController do
         @user = test_sign_in(Factory(:user))
         Factory(:user, :email => "another@example.com" )
         Factory(:user, :email => "smush@china.com" )
+        
+        30.times do
+          Factory(:user, :email => Factory.next(:email))
+        end
       end
       
       it "should be successful" do
@@ -26,14 +30,23 @@ describe UsersController do
       
       it "should have the right title" do
         get :index
-        response.should have_selector ('title', :content => "All users")
+        response.should have_selector('title', :content => "All users")
       end
       
       it "should have an element for each user" do
         get :index
-        User.all.each do |user|
+        User.paginate(:page => 1).each do |user|
           response.should have_selector('li', :content => user.name)
         end
+      end
+      
+      it "should paginate users" do
+        get :index
+        response.should have_selector('div.pagination')
+        response.should have_selector('span.disabled', :content => "Previous")
+        response.should have_selector('a', :href => "/users?page=2", :content => "2")
+        response.should have_selector('a', :href => "/users?page=2", :content => "Next")
+        
       end
       
       it "should have delete links for admins" do
@@ -101,7 +114,17 @@ describe UsersController do
       response.should have_selector('span.content', :content  => mp2.content )
     end
     
-    it "should paginate microposts"
+    it "should paginate microposts" do
+      36.times { Factory(:micropost, :user => @user, :content => "this is a test") }
+      
+      get :show, :id => @user
+      
+      response.should have_selector('div.pagination')
+      response.should have_selector('span.disabled', :content => "Previous")
+      response.should have_selector('a', :href => "/users/#{@user.id}?page=2", :content => "2")
+      response.should have_selector('a', :href => "/users/#{@user.id}?page=2", :content => "Next")
+      
+    end
     
     it "should display the micropost count" do
       10.times { Factory(:micropost, :user => @user, :content => "werd werd werd") }
