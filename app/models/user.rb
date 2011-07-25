@@ -45,13 +45,16 @@ class User < ActiveRecord::Base
   
   before_save :encrypt_password
   
+  #scope :admin, where(:admin => true)  gives an admin class method that allows to pull out all the admins in the database
+  
   def has_password?(submitted_password)
     encrypted_password == encrypt(submitted_password)
   end
   
   def feed
     #microposts
-    Micropost.where("user_id = ?", id) # conditional find, question mark escapes the sql command
+    #Micropost.where("user_id = ?", id)  conditional find, question mark escapes the sql command
+    Micropost.from_users_followed_by(self)
   end
   
   #### following methods ####
