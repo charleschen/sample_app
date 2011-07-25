@@ -1,0 +1,6 @@
+// syntax from prototype
+
+$("follow_form").update("<%= escape_javascript(render('users/follow')) %>") //updates the contents of "follow_form"
+$("followers").update('<%= "#{@user.followers.count} followers" %> ')
+
+
